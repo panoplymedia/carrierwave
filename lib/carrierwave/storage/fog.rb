@@ -1,7 +1,4 @@
 # encoding: utf-8
-
-require "fog"
-
 module CarrierWave
   module Storage
 
