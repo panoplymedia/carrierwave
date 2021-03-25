@@ -1,8 +1,6 @@
 require 'pathname'
 require 'active_support/core_ext/string/multibyte'
 require 'mini_mime'
-require 'mimemagic'
-require 'mimemagic/overlay'
 
 module CarrierWave
 
@@ -262,7 +260,6 @@ module CarrierWave
     def content_type
       @content_type ||=
         existing_content_type ||
-        mime_magic_content_type ||
         mini_mime_content_type
     end
 
@@ -327,23 +324,6 @@ module CarrierWave
       if @file.respond_to?(:content_type) && @file.content_type
         @file.content_type.to_s.chomp
       end
-    end
-
-    def mime_magic_content_type
-      if path
-        type = File.open(path) do |file|
-          MimeMagic.by_magic(file).try(:type)
-        end
-
-        if type.nil?
-          type = ::MiniMime.lookup_by_filename(path).try(:content_type)
-          type = 'invalid/invalid' unless type.nil? || type.start_with?('text/')
-        end
-
-        type
-      end
-    rescue Errno::ENOENT
-      nil
     end
 
     def mini_mime_content_type

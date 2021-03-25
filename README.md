@@ -266,22 +266,6 @@ class NoJsonUploader < CarrierWave::Uploader::Base
 end
 ```
 
-### CVE-2016-3714 (ImageTragick)
-This version of CarrierWave has the ability to mitigate CVE-2016-3714. However, you **MUST** set a content_type_allowlist in your uploaders for this protection to be effective, and you **MUST** either disable ImageMagick's default SVG delegate or use the RSVG delegate for SVG processing.
-
-
-A valid allowlist that will restrict your uploader to images only, and mitigate the CVE is:
-
-```ruby
-class MyUploader < CarrierWave::Uploader::Base
-  def content_type_allowlist
-    [/image\//]
-  end
-end
-```
-
-**WARNING**: A `content_type_allowlist` is the only form of allowlist or denylist supported by CarrierWave that can effectively mitigate against CVE-2016-3714. Use of `extension_allowlist` will not inspect the file headers, and thus still leaves your application open to the vulnerability.
-
 ### Filenames and unicode chars
 
 Another security issue you should care for is the file names (see
